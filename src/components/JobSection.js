@@ -12,38 +12,64 @@ const JobSection = () => {
     const [apiData, setApiData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const myHeaders = new Headers();
-                myHeaders.append("Content-Type", "application/json");
-                const body = JSON.stringify({
-                    "limit": 100,
-                    "offset": 0
-                });
-
-                const requestOptions = {
-                    method: "POST",
-                    headers: myHeaders,
-                    body
-                };
-
-                const response = await fetch("https://api.weekday.technology/adhoc/getSampleJdJSON", requestOptions);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data');
-                }
-                const data = await response.json();
-                setApiData(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
-    }, []);
+    }, [page]);
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            const body = JSON.stringify({
+                "limit": 10,
+                "offset": (page - 1) * 10
+            });
+
+            const requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body
+            };
+
+            const response = await fetch("https://api.weekday.technology/adhoc/getSampleJdJSON", requestOptions);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            setApiData((prevData) => {
+                if (prevData && Array.isArray(prevData)) {
+                    return [...prevData, ...data];
+                } else {
+                    return data;
+                }
+            });
+            
+            
+
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleScroll = () => {
+        if (
+            window.innerHeight + document.documentElement.scrollTop !==
+                document.documentElement.offsetHeight ||
+            loading
+        )
+            return;
+        setPage((prevPage) => prevPage + 1);
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [loading]);
 
     const renderAnimatedMulti = () => {
         return Array.from({ length: 6 }, (_, i) => (
@@ -58,10 +84,7 @@ const JobSection = () => {
             <CssBaseline />
             <Container maxWidth="xl">
                 <Box sx={{ bgcolor: '', height: '100vh', marginBottom: '1rem' }} >
-                    {/* <Grid container spacing={2}>
-                        {renderAnimatedMulti()}
-                    </Grid> */}
-                    {loading ? (
+                    {loading && !apiData ? (
                         <Typography>Loading...</Typography>
                     ) : error ? (
                         <Typography>Error: {error}</Typography>
