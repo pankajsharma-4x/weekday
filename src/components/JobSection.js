@@ -9,6 +9,9 @@ const options = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' },
+    { value: 'a1', label: 'Bubblegum ' },
+    { value: 'a2', label: 'Strawberryyyy' },
+    { value: 'a3', label: 'ButterScotch' },
 ];
 
 const JobSection = () => {
@@ -16,6 +19,7 @@ const JobSection = () => {
     return (
         <React.Fragment>
             <CssBaseline />
+
             <Container maxWidth="xl">
                 <Box sx={{ bgcolor: '', height: '100vh' }} >
                     <Grid container spacing={2}>
