@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import AnimatedMulti from './reusable/Select';
 import BasicCard from './BasicCard';
 import ResponsiveAppBar from './ResponsiveAppBar';
+import { TextField } from '@mui/material';
 
 const roles = [
     { value: 'frontend', label: 'Frontend' },
@@ -21,24 +22,29 @@ const roles = [
     { value: 'dataengineer', label: 'Data Engineer ' },
 ];
 
-const noofemployee = [
-    { value: '1-10', label: '1-10' },
-    { value: '11-20', label: '11-20' },
-    { value: '21-50', label: '21-50' },
-    { value: '51-100', label: '51-100 ' },
-    { value: '101-200', label: '101-200' },
-    { value: '201-500', label: '201-500' },
-    { value: '500+', label: '500+' },
+const minexp = [
+    { value: '1', label: '1' },
+    { value: '2', label: '2' },
+    { value: '3', label: '3' },
+    { value: '4', label: '4' },
+    { value: '5', label: '5' },
+    { value: '6', label: '6' },
+    { value: '7', label: '7' },
+    { value: '8', label: '8' },
+    { value: '9', label: '9' },
+    { value: '10', label: '10' },
 ];
 
 
 const JobSection = () => {
     const [selectedValues, setSelectedValues] = useState([]);
-    const [selectedEmp, setSelectedEmp] = useState([]);
+    const [selectedEmp, setSelectedEmp] = useState();
     const [apiData, setApiData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
+    const [compName,setCompName] =  useState('')
+    const [loc, setLoc] = useState('')
 
     useEffect(() => {
         fetchData();
@@ -100,30 +106,55 @@ const JobSection = () => {
         console.log(values);
     };
 
-    const handleChangeEmployeeCount = (selectedOptions) => {
-        const values = selectedOptions.map(option => option.value);
-        setSelectedEmp(values);
-        console.log(values);
+    const handleminExpCount = (selectedOption) => {
+        setSelectedEmp(selectedOption ? selectedOption.value : null);
     };
-    
+
+    const handleCompanyName = (event) => {
+        setCompName(event.target.value)
+    }
+
+    const handleLocation = (event) => {
+        setLoc(event.target.value)
+    }
+
+
     const renderAnimatedMulti = () => {
         return (
             // <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
             //     <AnimatedMulti roles={roles} onChange={handleChange} />
             // </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1rem' }}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <AnimatedMulti label={"Job Roles"} options={roles} onChange={handleChangeRoles} />
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <AnimatedMulti isMulti={true} label={"Job Roles"} options={roles} onChange={handleChangeRoles} />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <AnimatedMulti isClearable={true} isMulti={false} label={"Min experience"} options={minexp} onChange={handleminExpCount} />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <TextField
+                        label="Company name"
+                        id="outlined-size-small"
+                        //   defaultValue=""
+                        size="small"
+                        onChange={handleCompanyName}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <TextField
+                        label="Location"
+                        id="outlined-size-small"
+                        //   defaultValue=""
+                        size="small"
+                        onChange={handleLocation}
+                    />
+                </Grid>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <AnimatedMulti label={"Number of Employees"} options={noofemployee} onChange={handleChangeEmployeeCount} />
-            </Grid>
-        </Grid>
         );
     };
 
-    console.log("selectedValues",selectedValues)
-    console.log("selectedEmp",selectedEmp)
+    console.log("selectedValues", selectedValues)
+    console.log("selectedEmp>>>>>>>>", selectedEmp)
 
     return (
         <React.Fragment>
@@ -139,7 +170,13 @@ const JobSection = () => {
                     ) : error ? (
                         <Typography>Error: {error}</Typography>
                     ) : (
-                        <BasicCard data={apiData} selectedValues={selectedValues} selectedEmp= {selectedEmp} />
+                        <BasicCard 
+                           data={apiData} 
+                           selectedValues={selectedValues} 
+                           selectedEmp={selectedEmp} 
+                           compName = {compName}
+                           loc = {loc}
+                           />
                     )}
                 </Box>
             </Container>

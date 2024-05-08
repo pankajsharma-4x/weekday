@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Avatar, Button, CardActions, CardHeader } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-export default function BasicCard({ data, selectedValues }) {
+export default function BasicCard({ data, selectedValues, selectedEmp, compName , loc}) {
   const navigate = useNavigate();
 
   if (!data || !data.jdList || data.jdList.length === 0) {
@@ -19,6 +19,28 @@ export default function BasicCard({ data, selectedValues }) {
 
   let filteredData = data.jdList;
 
+  // if (selectedValues && selectedValues.length > 0) {
+  //   filteredData = data.jdList.filter(item => {
+  //     // Check if the job role matches any of the selected values
+  //     return selectedValues.includes(item.jobRole.toLowerCase());
+  //   });
+  // }
+
+  // if (selectedEmp && selectedEmp.length > 0) {
+  //   filteredData = data.jdList.filter(item => {
+  //     // Check if the job role matches any of the selected values
+  //     return selectedEmp.includes(item.minExp);
+  //   });
+  // }
+
+  //   if (compName) {
+  //     filteredData = filteredData.filter(item => {
+  //         // Check if the company name contains the user input (case insensitive)
+  //         return item.companyName.toLowerCase().includes(compName.toLowerCase());
+  //     });
+  // }
+
+
   if (selectedValues && selectedValues.length > 0) {
     filteredData = data.jdList.filter(item => {
       // Check if the job role matches any of the selected values
@@ -26,7 +48,31 @@ export default function BasicCard({ data, selectedValues }) {
     });
   }
 
-  console.log("data>>>>>>>>" ,data)
+  if (selectedEmp) {
+    filteredData = filteredData.filter(item => {
+      // Check if the minimum experience meets the selected value
+      return item.minExp >= selectedEmp;
+    });
+  }
+
+  if (compName) {
+    filteredData = filteredData.filter(item => {
+      // Check if the company name contains the user input (case insensitive)
+      return item.companyName.toLowerCase().includes(compName.toLowerCase());
+    });
+  }
+  if (loc) {
+    filteredData = filteredData.filter(item => {
+      // Check if the company name contains the user input (case insensitive)
+      return item.location.toLowerCase().includes(loc.toLowerCase());
+    });
+  }
+
+
+
+
+
+  console.log("data>>>>>>>>", data)
 
   return (
     <Grid container spacing={2}>
@@ -60,11 +106,11 @@ export default function BasicCard({ data, selectedValues }) {
                 Salary: {item.minJdSalary ? `${item.minJdSalary} - ${item.maxJdSalary} ${item.salaryCurrencyCode}` : 'Not specified'}
               </Typography>
               <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                Max Experience: {item.maxExp} years
+                Min Experience: {item.minExp} years
               </Typography>
             </CardContent>
             <CardActions >
-              <Button sx={{width:"100%" , background:"rgb(85, 239, 196)", color:"black" , fontWeight:"500"}} size="small">Easy Apply</Button>
+              <Button sx={{ width: "100%", background: "rgb(85, 239, 196)", color: "black", fontWeight: "500" }} size="small">Easy Apply</Button>
             </CardActions>
           </Card>
         </Grid>
