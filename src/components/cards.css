@@ -3,3 +3,43 @@
    /* max-width: 275px; */
    text-align: left;
 }
+
+.card-container {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content:flex-start;
+ }
+ 
+ .custom-card {
+   /* width: 250px; */
+   margin-bottom: 20px;
+   transition: transform 0.3s ease-in-out;
+ }
+ 
+ .custom-card:hover {
+   transform: scale(1.05);
+ }
+ 
+ .card-content {
+   padding: 16px; /* Adjust padding as needed */
+ }
+ 
+ .card-title {
+   font-size: 18px;
+   font-weight: bold;
+   margin-bottom: 8px;
+ }
+ 
+ .card-text {
+   font-size: 14px;
+   margin-bottom: 8px;
+ }
+ 
+ .card-button {
+   background-color: rgb(85, 239, 196);
+   color: black;
+   font-weight: 500;
+   width: 100%;
+ }
+ 
+ 
