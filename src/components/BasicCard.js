@@ -8,28 +8,34 @@ import { useNavigate } from 'react-router-dom';
 import './cards.css'; // Import CSS file for styling
 
 export default function BasicCard({ data, selectedValues, selectedEmp, compName, loc, tecStack, onLoadMore }) {
+
+  console.log("datafromBasiccard",data)
+
+  console.log("basicdata", data)
   const navigate = useNavigate();
   const observer = useRef();
 
-  const lastJobRef = useCallback(node => {
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && onLoadMore) {
-        onLoadMore();
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, [onLoadMore]);
+  // const lastJobRef = useCallback(node => {
+  //   if (observer.current) observer.current.disconnect();
+  //   observer.current = new IntersectionObserver(entries => {
+  //     if (entries[0].isIntersecting && onLoadMore) {
+  //       onLoadMore();
+  //     }
+  //   });
+  //   if (node) observer.current.observe(node);
+  // }, [onLoadMore]);
 
-  if (!data || !data.jdList || data.jdList.length === 0) {
-    return null;
-  }
+  // if (!data || !data.jdList || data.jdList.length === 0) {
+  //   return null;
+  // }
+
+  
 
   const handleViewJobDescription = (jobDescription) => {
     navigate('/home');
   };
 
-  let filteredData = data.jdList;
+  let filteredData = data;
 
   if (selectedValues && selectedValues.length > 0) {
     filteredData = filteredData.filter(item => {
@@ -75,12 +81,14 @@ export default function BasicCard({ data, selectedValues, selectedEmp, compName,
 
   console.log("data>>>>>>>>", data)
 
+  console.log("filtereddata---",filteredData)
+
   return (
     <Grid container spacing={2} className="card-container"> {/* Add class for container */}
       {filteredData.map((item, index) => {
         if (filteredData.length === index + 1) {
           return (
-            <Grid item key={item.jdUid} ref={lastJobRef} xs={12} sm={6} md={4} lg={4}>
+            <Grid item key={item.jdUid}  xs={12} sm={6} md={4} lg={4}>
               {/* Render last job with ref */}
               <JobCard item={item} handleViewJobDescription={handleViewJobDescription} />
             </Grid>
@@ -111,7 +119,7 @@ function JobCard({ item, handleViewJobDescription }) {
         <Typography variant="h5" component="div">
           {item.companyName}
         </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        <Typography  sx={{ fontSize: 14 , fontWeight:"500" }} color="text.secondary" gutterBottom>
           Job Role: {item.jobRole.charAt(0).toUpperCase() + item.jobRole.slice(1)}
         </Typography>
 

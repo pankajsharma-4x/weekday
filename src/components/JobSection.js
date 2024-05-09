@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import AnimatedMulti from './reusable/Select';
 import BasicCard from './BasicCard';
 import ResponsiveAppBar from './ResponsiveAppBar';
 import { TextField } from '@mui/material';
+import datajson from '../utils/data';
+
+console.log("datajson>>>>", datajson)
 
 const roles = [
     { value: 'frontend', label: 'Frontend' },
@@ -47,79 +49,78 @@ const tecStacklist = [
 ]
 
 
-
 const JobSection = () => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [selectedEmp, setSelectedEmp] = useState();
-    const [apiData, setApiData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [page, setPage] = useState(1);
     const [compName,setCompName] =  useState('')
     const [loc, setLoc] = useState('')
     const [tecStack, setTecStack] = useState()
 
-    useEffect(() => {
-        fetchData();
-    }, [page]);
+    // const [apiData, setApiData] = useState(null);
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState(null);
+    // const [page, setPage] = useState(1);
 
-    const fetchData = async () => {
-        try {
-            setLoading(true);
-            const myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            const body = JSON.stringify({
-                "limit": 6,
-                "offset": (page - 1) * 6
-            });
-    
-            const requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body
-            };
-    
-            const response = await fetch("https://api.weekday.technology/adhoc/getSampleJdJSON", requestOptions);
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            const data = await response.json();
+    // useEffect(() => {
+    //     fetchData();
+    // }, [page]);
 
-            setApiData((prevData) => {
-                if (prevData && Array.isArray(prevData)) {
-                    console.log("checkinggg")
-                    return [...prevData, ...data];
-                } else {
-                    console.log("checkingggdataaa")
-                    return data;
-                }
-            });
-
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const fetchData = async () => {
+    //     try {
+    //         setLoading(true);
+    //         const myHeaders = new Headers();
+    //         myHeaders.append("Content-Type", "application/json");
+    //         const body = JSON.stringify({
+    //             "limit": 6,
+    //             "offset": (page - 1) * 6
+    //         });
     
-
-    const handleScroll = () => {
-        const threshold = 800; // Adjust this value as needed
-        const isBottom = window.innerHeight + document.documentElement.scrollTop + threshold >= document.documentElement.offsetHeight;
+    //         const requestOptions = {
+    //             method: "POST",
+    //             headers: myHeaders,
+    //             body
+    //         };
     
-        if (isBottom && !loading) {
-            setPage((prevPage) => prevPage + 1);
-        }
-    };
+    //         const response = await fetch("https://api.weekday.technology/adhoc/getSampleJdJSON", requestOptions);
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch data');
+    //         }
+    //         const data = await response.json();
+
+    //         setApiData((prevData) => {
+    //             if (prevData && Array.isArray(prevData)) {
+    //                 console.log("checkinggg")
+    //                 return [...prevData, ...data];
+    //             } else {
+    //                 console.log("checkingggdataaa")
+    //                 return data;
+    //             }
+    //         });
+
+    //     } catch (error) {
+    //         setError(error.message);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
     
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [loading]);
+    // const handleScroll = () => {
+    //     const threshold = 800; // Adjust this value as needed
+    //     const isBottom = window.innerHeight + document.documentElement.scrollTop + threshold >= document.documentElement.offsetHeight;
     
+    //     if (isBottom && !loading) {
+    //         setPage((prevPage) => prevPage + 1);
+    //     }
+    // };
+    
+
+    // useEffect(() => {
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, [loading]);
 
     const handleChangeRoles = (selectedOptions) => {
         const values = selectedOptions.map(option => option.value);
@@ -147,9 +148,6 @@ const JobSection = () => {
 
     const renderAnimatedMulti = () => {
         return (
-            // <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-            //     <AnimatedMulti roles={roles} onChange={handleChange} />
-            // </Grid>
             <Grid container  spacing={2} sx={{ marginBottom: '1rem' }}>
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     <AnimatedMulti isMulti={true} label={"Job Roles"} options={roles} onChange={handleChangeRoles} />
@@ -161,7 +159,6 @@ const JobSection = () => {
                     <TextField
                         label="Company name"
                         id="outlined-size-small"
-                        //   defaultValue=""
                         size="small"
                         onChange={handleCompanyName}
                         sx={{width:"100%"}}
@@ -171,15 +168,11 @@ const JobSection = () => {
                     <TextField
                         label="Location"
                         id="outlined-size-small"
-                        //   defaultValue=""
                         size="small"
                         onChange={handleLocation}
                         sx={{width:"100%"}}
                     />
                 </Grid>
-                {/* <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <AnimatedMulti isClearable={true} isMulti={false} label={"Base Pay"} options={tecStacklist} onChange={handleTecStack} />
-                </Grid> */}
             </Grid>
         );
     };
@@ -196,20 +189,15 @@ const JobSection = () => {
                     <Grid  spacing={2} sx={{ marginBottom: '1rem' }}>
                         {renderAnimatedMulti()}
                     </Grid>
-                    {loading && !apiData ? (
-                        <Typography>Loading...</Typography>
-                    ) : error ? (
-                        <Typography>Error: {error}</Typography>
-                    ) : (
                         <BasicCard 
-                           data={apiData} 
+                           data={datajson} 
                            selectedValues={selectedValues} 
                            selectedEmp={selectedEmp} 
                            compName = {compName}
                            loc = {loc}
                            tecStack = {tecStack}
                            />
-                    )}
+                    {/* )} */}
                 </Box>
             </Container>
         </React.Fragment>
